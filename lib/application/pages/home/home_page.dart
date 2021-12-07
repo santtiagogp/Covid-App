@@ -1,15 +1,27 @@
-import 'package:covid_app/application/widgets/foundations/covid_text.dart';
-import 'package:covid_app/application/widgets/tokens/covid_spacing.dart';
 import 'package:flutter/material.dart';
+import 'mappers/home_mapper.dart';
+import 'models/home_model.dart';
 
-import '../constants/covid_colors.dart';
-import '../constants/utils/covid_responsive.dart';
+import '../../constants/covid_colors.dart';
+import '../../constants/utils/covid_responsive.dart';
+import '../../widgets/foundations/covid_text.dart';
+import '../../widgets/tokens/covid_spacing.dart';
 
 class HomePage extends StatelessWidget {
-  const HomePage({ Key? key }) : super(key: key);
+  const HomePage({ Key? key, required this.language }) : super(key: key);
+
+  final Map<String, dynamic> language;
+
+  static const String pageName = 'home';
 
   @override
   Widget build(BuildContext context) {
+
+    late HomeModel _model;
+    final HomeMapper _mapper = HomeMapper();
+    _model = _mapper.fromMap(language);
+
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: CovidColors.white,
@@ -17,7 +29,7 @@ class HomePage extends StatelessWidget {
       ),
       body: Column(
         children: [
-          _InformationCard()
+          _InformationCard(model: _model,)
         ],
       ),
     );
@@ -25,6 +37,12 @@ class HomePage extends StatelessWidget {
 }
 
 class _InformationCard extends StatelessWidget {
+
+  _InformationCard({
+    required this.model
+  });
+
+  final HomeModel model;
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +67,7 @@ class _InformationCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             CovidText.bigText(
-              text: 'Lorem ipsum dolor sit amet',
+              text: model.informationCard,
               fontWeight: FontWeight.w600
             ),
             InkWell(

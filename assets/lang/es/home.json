@@ -1,0 +1,8 @@
+{
+    "information_card" : "Conoce las medidas de seguridad para evitar contagios",
+    "confirmed" : "Confirmados",
+    "active" : "Casos activos",
+    "recovered" : "Recuperados",
+    "deceased" : "Muertos",
+    "graphic" : "Gráfica temporal"
+}
