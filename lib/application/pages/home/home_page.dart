@@ -4,6 +4,7 @@ import '../../constants/covid_colors.dart';
 import '../../constants/utils/covid_responsive.dart';
 import '../../widgets/foundations/covid_text.dart';
 import '../../widgets/molecules/stats_card/stats_card.dart';
+import '../../widgets/organisms/dropdown_countries/countries_dropdown.dart';
 import '../../widgets/tokens/covid_spacing.dart';
 import 'mappers/home_mapper.dart';
 import 'models/home_model.dart';
@@ -29,6 +30,9 @@ class HomePage extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: CovidColors.white,
         elevation: 0,
+        actions: [
+          DropDownCountries()
+        ],
       ),
       body: Column(
         children: [
@@ -61,6 +65,18 @@ class HomePage extends StatelessWidget {
                 data: '50'
               )
             ],
+          ),
+          Align(
+            alignment: Alignment.centerLeft,
+            child: Container(
+              margin: EdgeInsets.all(
+                _responsive.heightConfig(CovidSpacing.SPACE_LG)
+              ),
+              child: CovidText.mediumText(
+                text: _model.graphic,
+                fontWeight: FontWeight.bold
+              )
+            )
           )
         ],
       ),
