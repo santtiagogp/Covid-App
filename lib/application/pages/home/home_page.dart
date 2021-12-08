@@ -84,11 +84,11 @@ class _InformationCard extends StatelessWidget {
     return Align(
       alignment: Alignment.topCenter,
       child: Container(
-        padding: const EdgeInsets.all(CovidSpacing.SPACE_LG),
+        padding: const EdgeInsets.all(CovidSpacing.SPACE_MD),
         margin: EdgeInsets.symmetric(
           vertical: _responsive.heightConfig(CovidSpacing.SPACE_LG)
         ),
-        height: _responsive.heightConfig(150),
+        height: _responsive.heightConfig(160),
         width: _responsive.widthConfig(340.0),
         decoration: BoxDecoration(
           color: CovidColors.darkBlue,
@@ -108,7 +108,7 @@ class _InformationCard extends StatelessWidget {
                 child: const Icon(Icons.arrow_forward_outlined,
                 color: CovidColors.white),
                 height: _responsive.heightConfig(CovidSpacing.SPACE_XL),
-                width: _responsive.heightConfig(CovidSpacing.SPACE_XXL),
+                width: _responsive.widthConfig(CovidSpacing.SPACE_XXL),
                 decoration: BoxDecoration(
                   color: Colors.purple,
                   borderRadius: BorderRadius.circular(CovidSpacing.SPACE_MD)
