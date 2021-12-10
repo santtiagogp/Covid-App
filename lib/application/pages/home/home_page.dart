@@ -1,3 +1,5 @@
+import 'package:covid_app/application/pages/home/home_presenter.dart';
+import 'package:covid_app/domain/use_case/covid_usecase.dart';
 import 'package:flutter/material.dart';
 
 import '../../constants/covid_colors.dart';
@@ -10,16 +12,22 @@ import 'mappers/home_mapper.dart';
 import 'models/home_model.dart';
 
 class HomePage extends StatelessWidget {
-  const HomePage({ Key? key, required this.language }) : super(key: key);
+  const HomePage({ 
+    Key? key,
+    required this.language,
+    required this.useCase
+  }) : super(key: key);
 
   final Map<String, dynamic> language;
 
   static const String pageName = 'home';
+  final CovidDataUseCase useCase;
 
   @override
   Widget build(BuildContext context) {
 
     final CovidResponsive _responsive = CovidResponsive(context);
+    final HomePresenter _presenter = HomePresenter(useCase);
 
     late HomeModel _model;
     final HomeMapper _mapper = HomeMapper();
