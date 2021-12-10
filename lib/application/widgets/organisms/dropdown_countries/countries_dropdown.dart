@@ -17,13 +17,11 @@ class _DropDownCountriesState extends State<DropDownCountries> {
   @override
   Widget build(BuildContext context) {
     final _provider = Provider.of<CountryNotifier>(context);
-    String? selectedOpt = _provider.country;
     return DropdownButton(
-      value: selectedOpt,
+      value: _provider.country,
       items: Countries().getCountries(),
       onChanged: (String? opt) {
-        selectedOpt = opt;
-        _provider.setCountry = selectedOpt;
+        _provider.setCountry = opt;
       },
     );
   }

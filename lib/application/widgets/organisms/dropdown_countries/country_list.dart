@@ -19,7 +19,23 @@ class Countries {
     'Bahrain',
     'Bangladesh',
     'Barbados',
-    'Burundi'
+    'Burundi',
+    'Belgium',
+    'Benin',
+    'Bonaire',
+    'Bulgaria',
+    'Bahrain',
+    'Belarus',
+    'Belize',
+    'Bermuda',
+    'Bolivia',
+    'Brazil',
+    'Bhutan',
+    'Botswana',
+    'Canada',
+    'Chile',
+    'China',
+    'Congo'
   ];
 
   List<DropdownMenuItem<String>> getCountries() {
