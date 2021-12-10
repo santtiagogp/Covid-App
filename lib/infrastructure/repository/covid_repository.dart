@@ -27,7 +27,7 @@ class CovidApi extends CovidRepository {
 
   @override
   Future<List<CovidData>> getHistoricalStats(String country) async {
-    final String endpoint = '/covid-19/historical/$country?lastdays=90';
+    final String endpoint = '/v3/covid-19/historical/$country?lastdays=90';
 
     final Map<String, dynamic> resp = await _apiManager.get(endpoint);
 
