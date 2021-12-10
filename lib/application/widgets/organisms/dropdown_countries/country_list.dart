@@ -18,7 +18,8 @@ class Countries {
     'Bahamas',
     'Bahrain',
     'Bangladesh',
-    'Barbados'
+    'Barbados',
+    'Burundi'
   ];
 
   List<DropdownMenuItem<String>> getCountries() {

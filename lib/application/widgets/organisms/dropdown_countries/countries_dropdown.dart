@@ -1,4 +1,6 @@
+import '../../../../infrastructure/notifiers/country_notifier.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import 'country_list.dart';
 
@@ -11,15 +13,18 @@ class DropDownCountries extends StatefulWidget {
 }
 
 class _DropDownCountriesState extends State<DropDownCountries> {
-  
-  String? selectedOpt = 'Andorra';
 
   @override
   Widget build(BuildContext context) {
+    final _provider = Provider.of<CountryNotifier>(context);
+    String? selectedOpt = _provider.country;
     return DropdownButton(
       value: selectedOpt,
       items: Countries().getCountries(),
-      onChanged: (String? opt) => setState(() => selectedOpt = opt),
+      onChanged: (String? opt) {
+        selectedOpt = opt;
+        _provider.setCountry = selectedOpt;
+      },
     );
   }
 }

@@ -1,17 +1,20 @@
-import 'package:covid_app/application/pages/home/home_presenter.dart';
-import 'package:covid_app/domain/use_case/covid_usecase.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import '../../../domain/models/covid_model.dart';
+import '../../../domain/use_case/covid_usecase.dart';
+import '../../../infrastructure/notifiers/country_notifier.dart';
 import '../../constants/covid_colors.dart';
 import '../../constants/utils/covid_responsive.dart';
 import '../../widgets/foundations/covid_text.dart';
 import '../../widgets/molecules/stats_card/stats_card.dart';
 import '../../widgets/organisms/dropdown_countries/countries_dropdown.dart';
 import '../../widgets/tokens/covid_spacing.dart';
+import 'home_presenter.dart';
 import 'mappers/home_mapper.dart';
 import 'models/home_model.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({ 
     Key? key,
     required this.language,
@@ -24,14 +27,20 @@ class HomePage extends StatelessWidget {
   final CovidDataUseCase useCase;
 
   @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  @override
   Widget build(BuildContext context) {
 
     final CovidResponsive _responsive = CovidResponsive(context);
-    final HomePresenter _presenter = HomePresenter(useCase);
+    final HomePresenter _presenter = HomePresenter(widget.useCase);
+    final _provider = Provider.of<CountryNotifier>(context);
 
     late HomeModel _model;
     final HomeMapper _mapper = HomeMapper();
-    _model = _mapper.fromMap(language);
+    _model = _mapper.fromMap(widget.language);
 
 
     return Scaffold(
@@ -42,51 +51,64 @@ class HomePage extends StatelessWidget {
           DropDownCountries()
         ],
       ),
-      body: Column(
-        children: [
-          _InformationCard(model: _model,),
-          Row(
+      body: FutureBuilder(
+        future: _presenter.getCovidData(_provider.country.toString()),
+        builder: (BuildContext context, AsyncSnapshot<CovidResponse> snapshot) {
+          if(snapshot.hasData){
+            return Column(
             children: [
-              StatsCard(
-                type: StatsCardType.confirmed,
-                title: _model.confirmed,
-                data: '109923',
+              _InformationCard(model: _model,),
+              Row(
+                children: [
+                  StatsCard(
+                    type: StatsCardType.confirmed,
+                    title: _model.confirmed,
+                    data: '${snapshot.data!.cases}',
+                  ),
+                  StatsCard(
+                    type: StatsCardType.active,
+                    title: _model.active,
+                    data: '${snapshot.data!.active}'
+                  )
+                ],
               ),
-              StatsCard(
-                type: StatsCardType.active,
-                title: _model.active,
-                data: '3432'
+              SizedBox(height: _responsive.heightConfig(CovidSpacing.SPACE_MD),),
+              Row(
+                children: [
+                  StatsCard(
+                    type: StatsCardType.recovered,
+                    title: _model.recovered,
+                    data: '${snapshot.data!.recovered}'
+                  ),
+                  StatsCard(
+                    type: StatsCardType.deceased,
+                    title: _model.deceased,
+                    data: '${snapshot.data!.deaths}'
+                  )
+                ],
+              ),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Container(
+                  margin: EdgeInsets.all(
+                    _responsive.heightConfig(CovidSpacing.SPACE_LG)
+                  ),
+                  child: CovidText.mediumText(
+                    text: _model.graphic,
+                    fontWeight: FontWeight.bold
+                  )
+                )
               )
             ],
-          ),
-          SizedBox(height: _responsive.heightConfig(CovidSpacing.SPACE_MD),),
-          Row(
-            children: [
-              StatsCard(
-                type: StatsCardType.recovered,
-                title: _model.recovered,
-                data: '43232'
+            );
+          } else {
+            return const Center(
+              child: CircularProgressIndicator(
+                backgroundColor: CovidColors.accentBlue,
               ),
-              StatsCard(
-                type: StatsCardType.deceased,
-                title: _model.deceased,
-                data: '50'
-              )
-            ],
-          ),
-          Align(
-            alignment: Alignment.centerLeft,
-            child: Container(
-              margin: EdgeInsets.all(
-                _responsive.heightConfig(CovidSpacing.SPACE_LG)
-              ),
-              child: CovidText.mediumText(
-                text: _model.graphic,
-                fontWeight: FontWeight.bold
-              )
-            )
-          )
-        ],
+            );
+          }
+        },
       ),
     );
   }

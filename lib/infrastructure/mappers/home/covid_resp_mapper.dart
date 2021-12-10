@@ -1,3 +1,5 @@
+import 'package:covid_app/infrastructure/mappers/home/countryinfo_mapper.dart';
+
 import '../../../application/helpers/interfaces/mapper.dart';
 import '../../../domain/models/covid_model.dart';
 
@@ -10,9 +12,9 @@ class CovidRespMapper extends Mapper<CovidResponse> {
     casesPerOneMillion: json['casesPerOneMillion'],
     continent: json['continent'],
     country: json['country'],
-    countryInfo: json['countryInfo'],
+    countryInfo: CountryInfoMapper().fromMap(json['countryInfo']),
     critical: json['critical'],
-    criticalPerOneMillion: json['criticalPerOneMillion'],
+    criticalPerOneMillion: json['criticalPerOneMillion'].toDouble(),
     deaths: json['deaths'],
     deathsPerOneMillion: json['deathsPerOneMillion'],
     oneCasePerPeople: json['oneCasePerPeople'],

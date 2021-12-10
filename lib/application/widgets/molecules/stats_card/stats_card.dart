@@ -7,7 +7,7 @@ import 'stats_card_helper.dart';
 
 enum StatsCardType { confirmed, active, recovered, deceased }
 
-class StatsCard extends StatelessWidget {
+class StatsCard extends StatefulWidget {
   const StatsCard({
     Key? key,
     required this.type,
@@ -20,11 +20,18 @@ class StatsCard extends StatelessWidget {
   final String data;
 
   @override
+  State<StatsCard> createState() => _StatsCardState();
+}
+
+class _StatsCardState extends State<StatsCard> {
+  @override
   Widget build(BuildContext context) {
 
     final CovidResponsive _responsive = CovidResponsive(context);
 
-    return Container(
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 500),
+      curve: Curves.easeIn,
       padding: EdgeInsets.all(_responsive.heightConfig(CovidSpacing.SPACE_MD)),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -32,16 +39,16 @@ class StatsCard extends StatelessWidget {
           Align(
             alignment: Alignment.centerLeft,
             child: CovidText.mediumText(
-              text: title,
-              color: StatsCardHelper.textColorHelper(type),
+              text: widget.title,
+              color: StatsCardHelper.textColorHelper(widget.type),
               fontWeight: FontWeight.w500
             )
           ),
           Align(
             alignment: Alignment.centerRight,
             child: CovidText.bigText(
-              text: data,
-              color: StatsCardHelper.textColorHelper(type),
+              text: widget.data,
+              color: StatsCardHelper.textColorHelper(widget.type),
               fontWeight: FontWeight.bold
             )
           )
@@ -53,7 +60,7 @@ class StatsCard extends StatelessWidget {
       width: _responsive.widthConfig(CovidSpacing.SPACE_XXL + 100),
       height: _responsive.heightConfig(CovidSpacing.SPACE_XXL + 80),
       decoration: BoxDecoration(
-        color: StatsCardHelper.backgroundColorHelper(type),
+        color: StatsCardHelper.backgroundColorHelper(widget.type),
         borderRadius: BorderRadius.circular(CovidSpacing.SPACE_MD)
       ),
     );
