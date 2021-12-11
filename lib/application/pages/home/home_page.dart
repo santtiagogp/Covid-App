@@ -51,7 +51,22 @@ class _HomePageState extends State<HomePage> {
         backgroundColor: CovidColors.white,
         elevation: 0,
         actions: [
-          DropDownCountries()
+          FutureBuilder(
+            future: _presenter.getCountryImage('${_provider.country}'),
+            builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+              return Container(
+                margin: const EdgeInsets.all(CovidSpacing.SPACE_MD),
+                child: FadeInImage(
+                  fit: BoxFit.cover,
+                  height: _responsive.heightConfig(50),
+                  width: _responsive.heightConfig(50),
+                  placeholder: const AssetImage('assets/img/loading_gif.gif',),
+                  image: NetworkImage('${snapshot.data}'),
+                ),
+              );
+            },
+          ),
+          DropDownCountries(),
         ],
       ),
       body: SingleChildScrollView(
@@ -120,7 +135,8 @@ class _HomePageState extends State<HomePage> {
             ),
             FutureBuilder(
               future: _presenter.getHistoricalData(_provider.country.toString()),
-              builder: (BuildContext context, AsyncSnapshot<List<CovidData>> snapshot) {
+              builder: (BuildContext context,
+              AsyncSnapshot<List<CovidData>> snapshot) {
                 if(snapshot.hasData){
                   return Container(
                     margin: const EdgeInsets.all(CovidSpacing.SPACE_LG),

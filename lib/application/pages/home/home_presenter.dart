@@ -21,4 +21,11 @@ class HomePresenter {
 
   }
 
+  Future<String> getCountryImage(String country) async {
+    final resp = await _useCase.getCovidData(country);
+    final image = resp.countryInfo.flag;
+
+    return image;
+  }
+
 }

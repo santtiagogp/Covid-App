@@ -24,7 +24,7 @@ class InformationCard extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(CovidSpacing.SPACE_MD),
         margin: EdgeInsets.symmetric(
-          vertical: _responsive.heightConfig(CovidSpacing.SPACE_LG)
+          vertical: _responsive.heightConfig(CovidSpacing.SPACE_MD)
         ),
         height: _responsive.heightConfig(160),
         width: _responsive.widthConfig(340.0),

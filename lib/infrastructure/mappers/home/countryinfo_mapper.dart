@@ -9,7 +9,7 @@ class CountryInfoMapper extends Mapper<CountryInfo> {
     iso3: json['iso3'],
     lat: json['lat'].toDouble(),
     long: json['log'] ?? 0,
-    flag: json['flag']
+    flag: json['flag'] ?? 'https://www.segelectrica.com.co/wp-content/themes/consultix/images/no-image-found-360x250.png'
   );
 
   @override
