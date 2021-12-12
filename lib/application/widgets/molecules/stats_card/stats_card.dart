@@ -28,6 +28,8 @@ class _StatsCardState extends State<StatsCard> with TickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _animation;
 
+  late CovidResponsive _responsive;
+
   @override
   void dispose() {
     _controller.dispose();
@@ -35,10 +37,8 @@ class _StatsCardState extends State<StatsCard> with TickerProviderStateMixin {
   }
 
   @override
-  Widget build(BuildContext context) {
-
-    final CovidResponsive _responsive = CovidResponsive(context);
-
+  void initState() {
+    super.initState();
     _controller = AnimationController(
       duration: const Duration(milliseconds: 600),
       vsync: this, 
@@ -49,6 +49,12 @@ class _StatsCardState extends State<StatsCard> with TickerProviderStateMixin {
       begin: 0.0,
       end: 1.0,
     ).animate(_controller);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+
+    _responsive = CovidResponsive(context);
 
     _controller.forward();
 

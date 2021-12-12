@@ -3,16 +3,22 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 
 import 'application/pages/home/config/home_localizations.dart';
+import 'application/pages/home/notifiers/country_notifier.dart';
 import 'application/routes/routes.dart';
-import 'infrastructure/notifiers/country_notifier.dart';
+import 'domain/use_case/covid_usecase.dart';
+import 'infrastructure/repository/covid_repository.dart';
 
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (_) => CountryNotifier(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (_) => HomeNotifier(CovidDataUseCase(CovidApi())),
+        )
+      ],
       child: MaterialApp(
         localizationsDelegates: const [
           GlobalMaterialLocalizations.delegate,

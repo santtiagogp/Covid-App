@@ -1,10 +1,8 @@
+import '../../widgets/molecules/loading/loading_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../../domain/models/covid_model.dart';
-import '../../../domain/models/data_chart.dart';
 import '../../../domain/use_case/covid_usecase.dart';
-import '../../../infrastructure/notifiers/country_notifier.dart';
 import '../../constants/covid_colors.dart';
 import '../../constants/utils/covid_responsive.dart';
 import '../../widgets/foundations/covid_text.dart';
@@ -13,9 +11,9 @@ import '../../widgets/molecules/info_card/info_card.dart';
 import '../../widgets/molecules/stats_card/stats_card.dart';
 import '../../widgets/organisms/dropdown_countries/countries_dropdown.dart';
 import '../../widgets/tokens/covid_spacing.dart';
-import 'home_presenter.dart';
 import 'mappers/home_mapper.dart';
 import 'models/home_model.dart';
+import 'notifiers/country_notifier.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({ 
@@ -24,36 +22,44 @@ class HomePage extends StatefulWidget {
     required this.useCase
   }) : super(key: key);
 
-  final Map<String, dynamic> language;
-
   static const String pageName = 'home';
+
+  final Map<String, dynamic> language;
   final CovidDataUseCase useCase;
 
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+
+class _HomePageState extends State<HomePage>{
+
+  late final HomeMapper _mapper;
+  late HomeModel _model;
+  late CovidResponsive _responsive;
+
+  @override
+  void initState() {
+    super.initState();
+    _mapper = HomeMapper();
+    _model = _mapper.fromMap(widget.language);
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
+      final country = context.read<HomeNotifier>().country;
+      context.read<HomeNotifier>().getAllData(country);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-
-    final CovidResponsive _responsive = CovidResponsive(context);
-    final HomePresenter _presenter = HomePresenter(widget.useCase);
-    final _provider = Provider.of<CountryNotifier>(context);
-
-    late HomeModel _model;
-    final HomeMapper _mapper = HomeMapper();
-    _model = _mapper.fromMap(widget.language);
-
-
+    _responsive = CovidResponsive(context);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: CovidColors.white,
         elevation: 0,
         actions: [
-          FutureBuilder(
-            future: _presenter.getCountryImage('${_provider.country}'),
-            builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+          Consumer<HomeNotifier>(builder: (_, value, __) {
+
+            if(value.countryImage.isNotEmpty) {
               return Container(
                 margin: const EdgeInsets.all(CovidSpacing.SPACE_MD),
                 child: FadeInImage(
@@ -61,11 +67,13 @@ class _HomePageState extends State<HomePage> {
                   height: _responsive.heightConfig(50),
                   width: _responsive.heightConfig(50),
                   placeholder: const AssetImage('assets/img/loading_gif.gif',),
-                  image: NetworkImage('${snapshot.data}'),
+                  image: NetworkImage(value.countryImage),
                 ),
               );
-            },
-          ),
+            } else {
+              return const SizedBox.shrink();
+            }
+          }),
           DropDownCountries(),
         ],
       ),
@@ -73,54 +81,52 @@ class _HomePageState extends State<HomePage> {
         child: Column(
           children: [
             InformationCard(model: _model,),
-            FutureBuilder(
-              future: _presenter.getCovidData(_provider.country.toString()),
-              builder: (BuildContext context,
-                AsyncSnapshot<CovidResponse> snapshot) {
-              
-              if(snapshot.hasData) {
-                return Column(
-                children: [
-                  Row(
-                    children: [
-                      StatsCard(
-                        type: StatsCardType.confirmed,
-                        title: _model.confirmed,
-                        data: '${snapshot.data!.cases}',
-                      ),
-                      StatsCard(
-                        type: StatsCardType.active,
-                        title: _model.active,
-                        data: '${snapshot.data!.active}'
-                      )
-                    ],
-                  ),
-                  SizedBox(
-                    height: _responsive.heightConfig(CovidSpacing.SPACE_MD),
-                  ),
-                  Row(
-                    children: [
-                      StatsCard(
-                        type: StatsCardType.recovered,
-                        title: _model.recovered,
-                        data: '${snapshot.data!.recovered}'
-                      ),
-                      StatsCard(
-                        type: StatsCardType.deceased,
-                        title: _model.deceased,
-                        data: '${snapshot.data!.deaths}'
-                      )
-                    ],
-                  ),
-                ],
-                );
-              } else {
-                return const Center(
-                  child: CircularProgressIndicator()
-                );
+            Consumer<HomeNotifier>(builder: (context, value, child) {
+              if(value.loading) {
+                return const LoadingIndicator();
               }
-              },
-            ),
+
+              if(value.cases != null && value.recovered != null
+                && value.deceased != null && value.active != null) {
+                  return Column(
+                    children: [
+                      Row(
+                        children: [
+                          StatsCard(
+                            type: StatsCardType.confirmed,
+                            title: _model.confirmed,
+                            data: '${value.cases}',
+                          ),
+                          StatsCard(
+                            type: StatsCardType.active,
+                            title: _model.active,
+                            data: '${value.active}'
+                          )
+                        ],
+                      ),
+                      SizedBox(
+                        height: _responsive.heightConfig(CovidSpacing.SPACE_MD),
+                      ),
+                      Row(
+                        children: [
+                          StatsCard(
+                            type: StatsCardType.recovered,
+                            title: _model.recovered,
+                            data: '${value.recovered}'
+                          ),
+                          StatsCard(
+                            type: StatsCardType.deceased,
+                            title: _model.deceased,
+                            data: '${value.deceased}'
+                          )
+                        ],
+                      ),
+                    ],
+                );
+                } else {
+                  return const SizedBox.shrink();
+                }
+            }),
             Align(
               alignment: Alignment.centerLeft,
               child: Container(
@@ -133,28 +139,26 @@ class _HomePageState extends State<HomePage> {
                 )
               )
             ),
-            FutureBuilder(
-              future: _presenter.getHistoricalData(_provider.country.toString()),
-              builder: (BuildContext context,
-              AsyncSnapshot<List<CovidData>> snapshot) {
-                if(snapshot.hasData){
-                  return Container(
-                    margin: const EdgeInsets.all(CovidSpacing.SPACE_LG),
-                    height: _responsive.heightConfig(250),
-                    width: _responsive.widthConfig(400),
-                    child: CovidChart(
-                      arrayLength: snapshot.data!.length,
-                      xValueMapper: (int i) => snapshot.data![i].date,
-                      yValueMapper: (int i) => snapshot.data![i].cases
-                    ),
-                  );
-                } else {
-                  return const Center(
-                    child: CircularProgressIndicator()
-                  );
-                }
-              },
-            ),
+            Consumer<HomeNotifier>(builder: (_, value, __) {
+              if(value.loading) {
+                return const LoadingIndicator();
+              }
+
+              if(value.covidDataList.isNotEmpty) {
+                return Container(
+                  margin: const EdgeInsets.all(CovidSpacing.SPACE_LG),
+                  height: _responsive.heightConfig(250),
+                  width: _responsive.widthConfig(400),
+                  child: CovidChart(
+                    arrayLength: value.covidDataList.length ,
+                    xValueMapper: (int i) => value.covidDataList[i].date,
+                    yValueMapper: (int i) => value.covidDataList[i].cases
+                  ),
+                );
+              } else {
+                return const SizedBox.shrink();
+              }
+            } )
           ],
         ),
       ),

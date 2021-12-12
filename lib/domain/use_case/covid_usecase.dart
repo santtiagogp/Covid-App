@@ -1,8 +1,6 @@
-import 'package:covid_app/domain/models/data_chart.dart';
-import 'package:covid_app/domain/models/historical_model.dart';
-
 import '../../../domain/models/covid_model.dart';
 import '../../../domain/repository/covid_repository.dart';
+import '../models/data_chart.dart';
 
 class CovidDataUseCase {
 
