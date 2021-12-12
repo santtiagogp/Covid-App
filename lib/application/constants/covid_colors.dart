@@ -14,4 +14,5 @@ class CovidColors {
   static const accentBlue = Color.fromRGBO(23, 127, 251, 1);
   static const darkGreen = Color.fromRGBO(48, 166, 75, 1);
   static const darkGray = Color.fromRGBO(108, 117, 125, 1);
+  static const black = Color.fromRGBO(0, 0, 0, 1);
 }
