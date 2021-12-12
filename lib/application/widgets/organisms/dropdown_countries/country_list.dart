@@ -129,7 +129,6 @@ class Countries {
     'Nicaragua',
     'Niger',
     'Nigeria',
-    'North Korea',
     'North Macedonia',
     'Norway',
     'Oman',
