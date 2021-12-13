@@ -1,0 +1,16 @@
+{
+    "options" : [
+        {
+            "title" : "Estadísticas covid-19",
+            "route" : "home"
+        },
+        {
+            "title" : "Estadísticas de vacunación",
+            "route" : "vaccine"
+        },
+        {
+            "title" : "Ajustes e información",
+            "route" : "settings"
+        }
+    ]
+}

@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'application/pages/home/config/home_localizations.dart';
 import 'application/pages/home/notifiers/country_notifier.dart';
 import 'application/routes/routes.dart';
+import 'application/widgets/drawer/config/drawer_localizations.dart';
 import 'domain/use_case/covid_usecase.dart';
 import 'infrastructure/repository/covid_repository.dart';
 
@@ -24,7 +25,8 @@ class MyApp extends StatelessWidget {
           GlobalMaterialLocalizations.delegate,
           GlobalWidgetsLocalizations.delegate,
           GlobalCupertinoLocalizations.delegate,
-          HomePageLocalizations.delegate
+          HomePageLocalizations.delegate,
+          DrawerLocalizations.delegate
         ],
         supportedLocales: const [
           Locale('en'),

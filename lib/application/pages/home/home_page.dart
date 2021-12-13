@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import '../../../domain/use_case/covid_usecase.dart';
 import '../../constants/covid_colors.dart';
 import '../../constants/utils/covid_responsive.dart';
-import '../../widgets/drawer/covid_drawer.dart';
+import '../../routes/drawer.dart';
 import '../../widgets/foundations/covid_text.dart';
 import '../../widgets/molecules/chart/covid_chart.dart';
 import '../../widgets/molecules/info_card/info_card.dart';
@@ -54,7 +54,7 @@ class _HomePageState extends State<HomePage>{
   Widget build(BuildContext context) {
     _responsive = CovidResponsive(context);
     return Scaffold(
-      drawer: const CovidDrawer(),
+      drawer: DrawerRoutes.open(context),
       appBar: AppBar(
         leading: Builder(
           builder: (context) => IconButton(

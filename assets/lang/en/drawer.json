@@ -1,0 +1,16 @@
+{
+    "options" : [
+        {
+            "title" : "Covid-19 statistics",
+            "route" : "home"
+        },
+        {
+            "title" : "Covid-19 vaccination",
+            "route" : "vaccine"
+        },
+        {
+            "title" : "Settings and information",
+            "route" : "settings"
+        }
+    ]
+}
