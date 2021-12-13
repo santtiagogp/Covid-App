@@ -24,7 +24,7 @@ class CovidDrawer extends StatelessWidget {
         itemBuilder: (context, i) {
           return ListTile(
             title: CovidText.smallText(text: _model.options[i].title),
-            onTap: (){},
+            onTap: () => Navigator.pushNamed(context, _model.options[i].route),
           );
         },
         separatorBuilder: (_, i) => const Divider(),

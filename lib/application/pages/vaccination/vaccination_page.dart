@@ -4,7 +4,14 @@ import '../../constants/covid_colors.dart';
 import '../../routes/drawer.dart';
 
 class VaccinationPage extends StatelessWidget {
-  const VaccinationPage({ Key? key }) : super(key: key);
+  const VaccinationPage({
+    Key? key,
+    required this.language
+  }) : super(key: key);
+
+  static const String pageName = 'vaccine';
+
+  final Map<String, dynamic> language;
 
   @override
   Widget build(BuildContext context) {
@@ -20,8 +27,8 @@ class VaccinationPage extends StatelessWidget {
       ),
       body: SingleChildScrollView(
         child: Column(
-          children: [
-            
+          children: const [
+
           ]
         ),
       ),
