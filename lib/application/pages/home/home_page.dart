@@ -88,7 +88,7 @@ class _HomePageState extends State<HomePage>{
       body: SingleChildScrollView(
         child: Column(
           children: [
-            InformationCard(model: _model,),
+            InformationCard(title: _model.informationCard,),
             Consumer<HomeNotifier>(builder: (context, value, child) {
               if(value.loading) {
                 return const LoadingIndicator();

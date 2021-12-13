@@ -1,6 +1,6 @@
+import '../models/data_chart.dart';
 import '../models/global_vaccination.dart';
 import '../models/vaccine_info_model.dart';
-import '../models/vacination_data.dart';
 import '../repository/vaccination_repository.dart';
 
 class VaccDataUseCase {
@@ -12,7 +12,7 @@ class VaccDataUseCase {
   Future<VaccineInfo> getVaccinesInfo()
     => _vaccinationRepository.getVaccinesInfo();
   
-  Future<VaccinationData> getVaccinationInfo(String country)
+  Future<List<CovidData>> getVaccinationInfo(String country)
     => _vaccinationRepository.getVaccinationInfo(country);
 
   Future<List<GlobalVaccination>> getGlobalVaccination()

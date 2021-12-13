@@ -2,17 +2,17 @@ import 'package:flutter/material.dart';
 
 import '../../../constants/covid_colors.dart';
 import '../../../constants/utils/covid_responsive.dart';
-import '../../../pages/home/models/home_model.dart';
 import '../../foundations/covid_text.dart';
 import '../../tokens/covid_spacing.dart';
 
 class InformationCard extends StatelessWidget {
 
-  InformationCard({
-    required this.model
-  });
+  const InformationCard({
+    Key? key,
+    required this.title
+  }) : super(key: key);
 
-  final HomeModel model;
+  final String title;
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +37,7 @@ class InformationCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             CovidText.bigText(
-              text: model.informationCard,
+              text: title,
               fontWeight: FontWeight.w600
             ),
             InkWell(

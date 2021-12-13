@@ -1,3 +1,5 @@
+import 'package:covid_app/domain/models/data_chart.dart';
+
 import '../../domain/models/global_vaccination.dart';
 import '../../domain/models/vaccine_info_model.dart';
 import '../../domain/models/vacination_data.dart';
@@ -35,7 +37,7 @@ class VaccinesApi extends VaccinationRepository {
   }
 
   @override
-  Future<VaccinationData> getVaccinationInfo(String country) async{
+  Future<List<CovidData>> getVaccinationInfo(String country) async{
     final String endpoint =
     '/v3/covid-19/vaccine/coverage/countries/$country?lastdays=30&fullData=false';
 
@@ -43,7 +45,15 @@ class VaccinesApi extends VaccinationRepository {
 
     final data = VaccDataMapper().fromMap(resp);
 
-    return data;
+    final Map<String, int> map = data.timeline;
+
+    final List<CovidData> list = [];
+
+    for (final MapEntry<String, int> item in map.entries) {
+      list.add(CovidData(item.key, item.value));
+    }
+
+    return list;
 
   }
 

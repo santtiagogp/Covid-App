@@ -37,8 +37,7 @@ class HomeNotifier with ChangeNotifier {
   void getCovidData(String country) async {
 
     try {
-      _loading = true;
-      notifyListeners();
+      _activateLoading();
 
       final resp = await _useCase.getCovidData(country);
       _cases = resp.cases;
@@ -46,8 +45,7 @@ class HomeNotifier with ChangeNotifier {
       _recovered = resp.recovered;
       _active = resp.active;
 
-      _loading = false;
-      notifyListeners();
+      _deactivateLoading();
     } catch (e) {
       _error = e.toString();
       notifyListeners();
@@ -58,15 +56,13 @@ class HomeNotifier with ChangeNotifier {
   void getHistoricalData(String country) async {
 
     try {
-      _loading = true;
-      notifyListeners();
+      _activateLoading();
 
       final resp = await _useCase.getHistoricalData(country);
 
       _covidDataList = resp;
 
-      _loading = false;
-      notifyListeners();
+      _deactivateLoading();
     } catch (e) {
       _error = e.toString();
       notifyListeners();
@@ -76,17 +72,14 @@ class HomeNotifier with ChangeNotifier {
   void getCountryImage(String country) async {
 
     try {
-      _loading = true;
-      notifyListeners();
+      
+      _activateLoading();
 
       final resp = await _useCase.getCovidData(country);
 
       _countryImageUrl = resp.countryInfo.flag;
 
-      _loading = false;
-
-      notifyListeners();
-
+      _deactivateLoading();
     } catch (e) {
       _error = e.toString();
       notifyListeners();
@@ -97,6 +90,16 @@ class HomeNotifier with ChangeNotifier {
     getCovidData(country);
     getHistoricalData(country);
     getCountryImage(country);
+  }
+
+  void _activateLoading() {
+    _loading = true;
+    notifyListeners();
+  }
+
+  void _deactivateLoading() {
+    _loading = false;
+    notifyListeners();
   }
 
 }

@@ -37,7 +37,7 @@ class CovidApi extends CovidRepository {
 
     final List<CovidData> chartData = List.empty(growable: true);
 
-    for(final item in map.entries) {
+    for(final MapEntry<String, int> item in map.entries) {
       chartData.add(CovidData(item.key, item.value));
     }
 
