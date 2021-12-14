@@ -1,15 +1,16 @@
-import '../../constants/utils/covid_responsive.dart';
-import '../../widgets/molecules/chart/covid_chart.dart';
-import '../../widgets/organisms/dropdown_countries/countries_dropdown.dart';
-import '../../widgets/tokens/covid_spacing.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../constants/covid_colors.dart';
+import '../../constants/utils/covid_responsive.dart';
 import '../../routes/drawer.dart';
+import '../../widgets/molecules/chart/covid_chart.dart';
 import '../../widgets/molecules/info_card/info_card.dart';
 import '../../widgets/molecules/loading/loading_indicator.dart';
 import '../../widgets/molecules/stats_card/stats_card.dart';
+import '../../widgets/organisms/dropdown_countries/countries_dropdown.dart';
+import '../../widgets/tokens/covid_spacing.dart';
+import '../home/notifiers/country_notifier.dart';
 import 'mappers/vacc_mapper.dart';
 import 'models/vacc_model.dart';
 import 'notifier/vacc_notifier.dart';
@@ -51,6 +52,23 @@ class _VaccinationPageState extends State<VaccinationPage> {
       drawer: DrawerRoutes.open(context),
       appBar: AppBar(
         actions: [
+          Consumer<HomeNotifier>(builder: (_, value, __) {
+
+            if(value.countryImage.isNotEmpty) {
+              return Container(
+                margin: const EdgeInsets.all(CovidSpacing.SPACE_MD),
+                child: FadeInImage(
+                  fit: BoxFit.cover,
+                  height: _responsive.heightConfig(30),
+                  width: _responsive.heightConfig(40),
+                  placeholder: const AssetImage('assets/img/loading_gif.gif',),
+                  image: NetworkImage(value.countryImage),
+                ),
+              );
+            } else {
+              return const SizedBox.shrink();
+            }
+          }),
           DropDownCountries(),
         ],
         backgroundColor: CovidColors.white,

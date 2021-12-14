@@ -1,0 +1,11 @@
+{
+    "title" : "Settings",
+    "options" : [
+        {
+            "opt" : "Info: https://disease.sh/"
+        },
+        {
+            "opt" : "Dark mode"
+        }
+    ]
+}
